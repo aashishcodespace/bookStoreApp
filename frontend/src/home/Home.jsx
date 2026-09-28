@@ -8,9 +8,12 @@ function Home() {
     return (
         <>
             <Navbar />
-            <Banner />
-            <Freebook />
-            <Footer />
+
+            <div className="pt-16">
+                <Banner />
+                <Freebook />
+                <Footer />
+            </div>
         </>
     );
 }

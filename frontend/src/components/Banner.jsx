@@ -11,9 +11,9 @@ function Banner() {
                             Hello, welcomes here to learn something <span className="text-pink-500">new everyday!!!</span>
                         </h1>
                         <p className="text-xl">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum itaque, sint accusamus ipsa voluptatibus similique consequuntur. Aliquam ullam officia ex illum neque optio dolor repellendus soluta!
+                            Explore a wide range of courses designed to help you learn new skills, improve your knowledge, and grow your career. Start learning today and take your skills to the next level!
                         </p>
-                        <label className="input input-bordered flex items-center gap-2">
+                        <label className="input input-bordered flex items-center gap-2 dark:bg-slate-700 dark:border-gray-500">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 16 16"
@@ -24,13 +24,17 @@ function Banner() {
                                 <path
                                     d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
                             </svg>
-                            <input type="text" className="grow border-[2px] rounded-md" placeholder="Email" />
+                            <input
+                                type="text"
+                                className="grow border-[2px] rounded-md dark:bg-slate-700 dark:text-white dark:placeholder-gray-300"
+                                placeholder="Email"
+                            />
                         </label>
                     </div>
                     <button className="get-started-btn mt-6">Get Started</button>
                 </div>
                 <div className="w-full order-1 md:w-1/2 dark:bg-slate-900 dark:text-white">
-                <img src={banner} className="w-92 h-92 dark:bg-slate-900 dark:text-white" alt="" />
+                    <img src={banner} className="w-92 h-92 dark:bg-slate-900 dark:text-white" alt="" />
                 </div>
             </div>
         </>

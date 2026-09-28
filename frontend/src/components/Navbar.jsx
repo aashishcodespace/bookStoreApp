@@ -1,142 +1,363 @@
-import React, { useEffect, useState } from 'react';
-import Login from './Login';
-import { Link } from 'react-router-dom';
-
+import React, { useEffect, useState } from "react";
+import Login from "./Login";
+import { Link } from "react-router-dom";
+import Logout from "./Logout";
+import { useAuth } from "../context/AuthProvider";
 
 function Navbar() {
+  const [authUser] = useAuth();
 
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "light")
-  const element = document.documentElement;
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "light"
+  );
+
+  // ================= THEME =================
   useEffect(() => {
+    const element = document.documentElement;
+
     if (theme === "dark") {
       element.classList.add("dark");
-      localStorage.setItem("theme", "dark")
       document.body.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       element.classList.remove("dark");
-      localStorage.setItem("theme", "light");
       document.body.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
-  }, [theme])
+  }, [theme]);
 
-  const [sticky, setSticky] = useState(false)
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setSticky(true);
-      }
-      else {
-        setSticky(false);
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-
-  }, [])
+  // ================= NAV ITEMS =================
   const navItems = (
     <>
-      <li className="dark:bg-slate-900 dark:text-white">
-        <a href="/">Home</a>
+      <li>
+        <Link to="/">Home</Link>
       </li>
-      <li className="dark:bg-slate-900 dark:text-white">
-        <a href="/course">Course</a>
+
+      <li>
+        <Link to="/course">Course</Link>
       </li>
-      <li className="dark:bg-slate-900 dark:text-white">
+
+      <li>
         <Link to="/contact">Contact</Link>
       </li>
-      <li className="dark:bg-slate-900 dark:text-white">
-        <a>About</a>
+
+      <li>
+        <a href="#about">About</a>
       </li>
     </>
   );
+
+  // ================= LOGIN =================
+  const openLogin = () => {
+    const modal = document.getElementById("my_modal_3");
+
+    if (modal) {
+      modal.showModal();
+    }
+  };
+
   return (
     <>
-      <div className={` max-w-screen-2xl container mx-auto md:px-20 px-4 dark:bg-slate-900 dark:text-white z-50 fixed top-0 left-0 right-0 w-full ${sticky ? "sticky-navbar shadow-md  bg-base-200 dark:bg-slate-600 dark:text-white duration-300 transition-all ease-in-out" : ""
-        }`}>
-        <div className="navbar">
-          <div className="navbar-start">
-            <div className="dropdown">
-              <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h8m-8 6h16" />
-                </svg>
+      {/* ================= FIXED NAVBAR ================= */}
+      <nav
+        className="
+          fixed
+          top-0
+          left-0
+          right-0
+          w-full
+          h-16
+          z-[99999]
+
+          bg-white
+          dark:bg-slate-900
+          dark:text-white
+
+          border-b
+          border-gray-200
+          dark:border-slate-700
+
+          shadow-sm
+        "
+      >
+        <div
+          className="
+            w-full
+            max-w-screen-2xl
+            h-full
+            mx-auto
+            px-3
+            sm:px-4
+            md:px-8
+            lg:px-20
+          "
+        >
+          <div className="h-full flex items-center justify-between">
+
+            {/* ================= LEFT ================= */}
+            <div className="flex items-center gap-1 shrink-0">
+
+              {/* Mobile Menu */}
+              <div className="dropdown lg:hidden">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-sm px-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h8m-8 6h16"
+                    />
+                  </svg>
+                </div>
+
+                <ul
+                  tabIndex={0}
+                  className="
+                    menu
+                    menu-sm
+                    dropdown-content
+                    z-[100000]
+                    mt-3
+                    w-52
+                    p-2
+                    shadow-lg
+                    rounded-box
+                    bg-white
+                    dark:bg-slate-800
+                    dark:text-white
+                  "
+                >
+                  {navItems}
+                </ul>
               </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                {navItems}
-              </ul>
-            </div>
-            <a className="text-2xl font-bold cursor-pointer">bookStore</a>
-          </div>
-          <div className="navbar-end space-x-3">
-            <div className="navbar-center hidden lg:flex">
-              <ul className="menu menu-horizontal px-1">{navItems}</ul>
-            </div>
-            <div className="hidden md:block">
-              <label className="px-3 py-2 border rounded-md flex items-center gap-2">
-                <input type="text" className="grow outline-none dark:bg-slate-900 dark:text-white" placeholder="Search" />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  className="h-4 w-4 opacity-70">
-                  <path
-                    fillRule="evenodd"
-                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                    clipRule="evenodd" />
-                </svg>
-              </label>
-            </div>
-            <label className="swap swap-rotate">
-              {/* this hidden checkbox controls the state */}
-              <input type="checkbox" className="theme-controller" value="synthwave" />
 
-              {/* sun icon */}
-              <svg
-                className="swap-off h-6 w-6 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              {/* Logo */}
+              <Link
+                to="/"
+                className="
+                  text-lg
+                  sm:text-xl
+                  md:text-2xl
+                  font-bold
+                  whitespace-nowrap
+                "
               >
+                bookStore
+              </Link>
+            </div>
 
-                <path
-                  d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-              </svg>
+            {/* ================= RIGHT ================= */}
+            <div className="flex items-center gap-2 sm:gap-3">
 
-              {/* moon icon */}
-              <svg
-                className="swap-on h-6 w-6 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              {/* Desktop Menu */}
+              <div className="hidden lg:block">
+                <ul className="menu menu-horizontal items-center px-1">
+                  {navItems}
+                </ul>
+              </div>
+
+              {/* Search */}
+              <div className="hidden md:block">
+                <label
+                  className="
+                    h-10
+                    w-40
+                    xl:w-48
+                    px-3
+                    border
+                    border-gray-300
+                    dark:border-gray-600
+                    rounded-md
+
+                    flex
+                    items-center
+                    gap-2
+
+                    bg-white
+                    dark:bg-slate-800
+                  "
+                >
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="
+                      w-full
+                      outline-none
+                      bg-transparent
+                      dark:text-white
+                    "
+                  />
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    className="h-4 w-4 shrink-0 opacity-70"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="
+                        M9.965 11.026
+                        a5 5 0 1 1
+                        1.06-1.06
+                        l2.755 2.754
+                        a.75.75 0 1 1
+                        -1.06 1.06
+                        l-2.755-2.754
+                        Z
+                        M10.5 7
+                        a3.5 3.5 0 1 1
+                        -7 0
+                        a3.5 3.5 0 0 1
+                        7 0
+                        Z
+                      "
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </label>
+              </div>
+
+              {/* ================= THEME ================= */}
+              <button
+                type="button"
+                onClick={() =>
+                  setTheme(
+                    theme === "light"
+                      ? "dark"
+                      : "light"
+                  )
+                }
+                className="
+                  h-10
+                  w-10
+                  flex
+                  items-center
+                  justify-center
+                  rounded-md
+
+                  hover:bg-gray-100
+                  dark:hover:bg-slate-800
+
+                  duration-200
+                  shrink-0
+                "
+                aria-label="Toggle theme"
               >
-                <path
-                  d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-              </svg>
-            </label>
-            {/* <div className="navbar-end"> */}
-            <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer"
-              onClick={() => document.getElementById("my_modal_3").showModal()}>
-              Login</a>
-            <Login />
+                {theme === "light" ? (
+                  /* Moon */
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      d="
+                        M21.64 13a1 1 0 0 0-1.05-.14
+                        8.05 8.05 0 0 1-3.37.73
+                        A8.15 8.15 0 0 1 9.08 5.49
+                        a8.59 8.59 0 0 1 .25-2
+                        A1 1 0 0 0 8 2.36
+                        a10.14 10.14 0 1 0 14 11.69
+                        A1 1 0 0 0 21.64 13
+                        Z
+                      "
+                    />
+                  </svg>
+                ) : (
+                  /* Sun */
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      d="
+                        M12 2a1 1 0 0 0-1 1v1
+                        a1 1 0 0 0 2 0V3
+                        a1 1 0 0 0-1-1Z
+
+                        M12 19
+                        a1 1 0 0 0-1 1v1
+                        a1 1 0 0 0 2 0v-1
+                        a1 1 0 0 0-1-1Z
+
+                        M4.22 3.81
+                        a1 1 0 0 0-1.41 1.41
+                        l.71.71
+                        a1 1 0 0 0 1.41-1.41Z
+
+                        M20.48 18.07
+                        l-.71-.71
+                        a1 1 0 0 0-1.41 1.41
+                        l.71.71
+                        a1 1 0 0 0 1.41-1.41Z
+
+                        M2 11
+                        a1 1 0 0 0 0 2h1
+                        a1 1 0 0 0 0-2Z
+
+                        M21 11
+                        a1 1 0 0 0 0 2h1
+                        a1 1 0 0 0 0-2Z
+
+                        M12 7
+                        a5 5 0 1 0 0 10
+                        a5 5 0 0 0 0-10Z
+                      "
+                    />
+                  </svg>
+                )}
+              </button>
+
+              {/* ================= LOGIN / LOGOUT ================= */}
+              <div className="shrink-0">
+                {authUser ? (
+                  <Logout />
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="
+                        h-10
+                        bg-black
+                        text-white
+                        px-3
+                        rounded-md
+
+                        hover:bg-slate-800
+                        duration-200
+
+                        whitespace-nowrap
+                      "
+                      onClick={openLogin}
+                    >
+                      Login
+                    </button>
+
+                    <Login />
+                  </>
+                )}
+              </div>
+
+            </div>
           </div>
         </div>
-      </div>
-      {/* </div> */}
+      </nav>
     </>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
