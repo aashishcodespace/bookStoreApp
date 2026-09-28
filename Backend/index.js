@@ -15,7 +15,7 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const URI = process.env.MongoDBURI;
 
-console.log("Mongo URI:", URI);
+// console.log("Mongo URI:", URI);
 
 mongoose.connect(URI)
     .then(() => {
