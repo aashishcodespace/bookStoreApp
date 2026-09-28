@@ -30,6 +30,6 @@ mongoose.connect(URI)
     app.use("/book",bookRoute);
     app.use("/user",userRoute);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is listening on port ${PORT}`);
 });
